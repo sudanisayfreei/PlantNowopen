@@ -1,8 +1,8 @@
 title: PlantNow
 description: معلومات زراعية موثقة عن السودان، مع توضيح مصادر البيانات وحدودها.
 lang: ar
-baseurl: ""
-url: ""
+url: "https://sudanisayfreei.github.io"
+baseurl: "/PlantNowopen"
 markdown: kramdown
 exclude:
   - .azure

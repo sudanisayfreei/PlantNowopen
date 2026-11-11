@@ -7,7 +7,7 @@
 يتطلب Ruby وJekyll. من مجلد المشروع شغّل:
 
 ```sh
-jekyll serve --host 0.0.0.0 --port 3000
+jekyll serve --baseurl "" --host 0.0.0.0 --port 3000
 ```
 
 ثم افتح `http://localhost:3000`.
@@ -21,7 +21,7 @@ jekyll build
 وعند اختبار نشر الموقع تحت مسار مستودع مثل GitHub Pages:
 
 ```sh
-jekyll build --baseurl /PlantNowopen
+jekyll build
 ```
 
 المجلد `_site/` ناتج بناء؛ مصدر الموقع هو ملفات HTML وCSS وJavaScript وبيانات `data/`.

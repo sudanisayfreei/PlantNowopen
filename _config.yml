@@ -1,0 +1,10 @@
+title: PlantNow
+description: معلومات زراعية موثقة عن السودان، مع توضيح مصادر البيانات وحدودها.
+lang: ar
+baseurl: ""
+url: ""
+markdown: kramdown
+exclude:
+  - .azure
+  - Gemfile
+  - Gemfile.lock

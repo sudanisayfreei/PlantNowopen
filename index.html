@@ -1,0 +1,187 @@
+---
+---
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#153a2c">
+    <meta name="description" content="معلومات زراعية موثقة عن السودان، مع توضيح مصادر البيانات وحدودها.">
+    <title>PlantNow | الزراعة في السودان</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+    <script src="{{ '/app.js' | relative_url }}" defer></script>
+  </head>
+  <body data-data-url="{{ '/data/sudan/agriculture-snapshot.json' | relative_url }}">
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="PlantNow - الرئيسية">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M25.5 5.5C16 5.7 8.6 8.2 7.3 14.3c-.9 4.1 2.4 7 6.1 6.4 7-1.1 10.1-9 12.1-15.2Z" fill="currentColor"/>
+            <path d="M5 27c4-7.3 9-11.7 16-15" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>Plant<span class="brand-accent">Now</span></span>
+      </a>
+      <nav class="site-nav" aria-label="التنقل الرئيسي">
+        <a class="nav-link active" href="#home">الرئيسية</a>
+        <a class="nav-link" href="#insights">المؤشرات</a>
+        <a class="nav-link" href="#sources">المصادر</a>
+      </nav>
+      <a class="coverage-pill" href="#insights">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>السودان</span>
+      </a>
+    </header>
+
+    <main id="home">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-content">
+          <div class="eyebrow"><span class="eyebrow-line"></span> الزراعة في السودان</div>
+          <h1 id="hero-title">الأرض تحكي.<br><span>والبيانات توضح.</span></h1>
+          <p class="hero-copy">صورة موثقة عن الموسم الزراعي والحبوب والأمطار في السودان، مستندة إلى مصادر دولية رسمية.</p>
+          <a class="hero-link" href="#insights">استكشف المؤشرات <span aria-hidden="true">←</span></a>
+          <div class="hero-meta">
+            <span class="meta-icon" aria-hidden="true">◷</span>
+            <span>آخر تحديث للمصدر: <strong id="snapshot-date">جارٍ التحميل…</strong></span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="sun"></div>
+          <div class="sun-halo"></div>
+          <div class="landscape landscape-back"></div>
+          <div class="landscape landscape-front"></div>
+          <div class="field-lines"></div>
+          <div class="plant plant-one"><i></i><i></i><b></b></div>
+          <div class="plant plant-two"><i></i><i></i><b></b></div>
+          <div class="plant plant-three"><i></i><i></i><b></b></div>
+          <div class="art-label"><span class="status-dot"></span> من قلب السودان</div>
+        </div>
+        <div class="hero-bottom">
+          <span>بيانات موثقة، لفهمٍ أعمق للأرض</span>
+          <span class="hero-bottom-rule"></span>
+          <span class="hero-bottom-en">GROW WITH KNOWLEDGE</span>
+        </div>
+      </section>
+
+      <section class="location-section section-wrap" id="location" aria-labelledby="location-title">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow section-eyebrow"><span class="eyebrow-line"></span> موقعك على الخريطة</div>
+            <h2 id="location-title">اكتشف منطقتك</h2>
+            <p class="section-description">اسم المنطقة يُستنتج من موقع جهازك، بعد موافقتك، باستخدام OpenStreetMap.</p>
+          </div>
+        </div>
+        <div class="location-panel">
+          <div class="location-details">
+            <span class="location-pin" aria-hidden="true">⌖</span>
+            <div class="location-copy">
+              <h3 id="location-name">لم يتم تحديد موقعك بعد</h3>
+              <p id="location-status" role="status" aria-live="polite">اضغط الزر للسماح بتحديد موقع جهازك وعرض اسم المنطقة.</p>
+              <p class="location-coordinates" id="location-coordinates" dir="ltr" hidden></p>
+            </div>
+            <button class="location-button" id="locate-button" type="button">
+              <span aria-hidden="true">⌖</span>
+              <span>حدد موقعي</span>
+            </button>
+          </div>
+          <div class="map-frame" id="map-frame" aria-label="خريطة موقعك"></div>
+          <div class="map-caption">
+            <span>سيُرسل موقعك إلى خدمة OpenStreetMap عند الطلب فقط.</span>
+            <span class="map-attribution-links">
+              <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© مساهمو OpenStreetMap</a>
+              <a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener noreferrer">سياسة استخدام خدمة المواقع</a>
+            </span>
+          </div>
+        </div>
+        <div class="recommendations-panel" id="recommendations" hidden>
+          <div class="recommendations-heading">
+            <div>
+              <div class="eyebrow section-eyebrow"><span class="eyebrow-line"></span> قائمة أولية حسب الموقع</div>
+              <h3>ماذا يمكن أن تزرع في منطقتك؟</h3>
+              <p class="section-description">خيارات استرشادية للسودان مع ملخص مناخ موقعك، وليست ترتيبًا لمدى ملاءمة المحاصيل لأرضك.</p>
+            </div>
+          </div>
+          <div class="climate-summary" id="climate-summary" role="status" aria-live="polite">
+            جارٍ تحميل ملخص المناخ من NASA POWER…
+          </div>
+          <div class="recommendation-controls">
+            <label for="irrigation-select">توفر الري</label>
+            <select id="irrigation-select">
+              <option value="unknown">غير معروف</option>
+              <option value="yes">يتوفر ري منتظم</option>
+              <option value="no">لا يتوفر ري منتظم</option>
+            </select>
+            <span class="soil-reminder">لم تُحلل التربة؛ افحصها قبل الزراعة.</span>
+          </div>
+          <div class="recommendation-tabs" role="group" aria-label="نوع المحاصيل">
+            <button class="recommendation-tab active" type="button" data-category="grains" aria-pressed="true">الحبوب</button>
+            <button class="recommendation-tab" type="button" data-category="seedlings" aria-pressed="false">الشتول</button>
+            <button class="recommendation-tab" type="button" data-category="fruit" aria-pressed="false">الأشجار المثمرة</button>
+          </div>
+          <div class="recommendation-grid" id="recommendation-grid" aria-live="polite"></div>
+          <p class="recommendation-disclaimer">هذه ليست توصية زراعية معتمدة ولا تحدد صنفًا أو موعد زراعة. بيانات NASA مناخية تاريخية نموذجية وليست توقعًا للموسم الحالي، كما أن بيانات الخريطة لا تغني عن تحليل التربة والإرشاد الزراعي المحلي.</p>
+        </div>
+      </section>
+
+      <section class="insights-section section-wrap" id="insights" aria-labelledby="insights-title">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow section-eyebrow"><span class="eyebrow-line"></span> من الميدان إلى البيانات</div>
+            <h2 id="insights-title">ملامح الموسم الزراعي</h2>
+            <p class="section-description">أرقام وملاحظات منشورة عن السودان، مع الفترة الزمنية والنطاق الجغرافي لكل معلومة.</p>
+          </div>
+          <span class="section-index">01 <span>/</span> 02</span>
+        </div>
+
+        <div class="notice" role="note">
+          <span class="notice-icon" aria-hidden="true">i</span>
+          <p id="data-notice">جارٍ تحميل ملاحظة البيانات…</p>
+        </div>
+
+        <div class="facts-grid" id="facts-grid" aria-live="polite">
+          <div class="loading-card">جارٍ تحميل المؤشرات الزراعية…</div>
+        </div>
+        <div class="load-error" id="load-error" role="alert" hidden>
+          <p>تعذر تحميل بيانات الزراعة. تحقق من اتصالك ثم أعد المحاولة.</p>
+          <button class="retry-button" id="retry-button" type="button">إعادة المحاولة</button>
+        </div>
+      </section>
+
+      <section class="sources-section" id="sources" aria-labelledby="sources-title">
+        <div class="section-wrap">
+          <div class="section-heading sources-heading">
+            <div>
+              <div class="eyebrow section-eyebrow"><span class="eyebrow-line"></span> المعرفة تبدأ بالمصدر</div>
+              <h2 id="sources-title">مصادر نثق بها</h2>
+              <p class="section-description">لكل معلومة مرجعها. اطلع على البيانات الأصلية وتفاصيل منهجيتها.</p>
+            </div>
+            <span class="section-index">02 <span>/</span> 02</span>
+          </div>
+          <div class="sources-grid" id="sources-grid">
+            <div class="loading-card">جارٍ تحميل المصادر…</div>
+          </div>
+          <p class="source-footnote">البيانات المعروضة تعكس تاريخ نشر المصدر، وقد تتغير الظروف والبيانات بمرور الوقت.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand footer-brand" href="#home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M25.5 5.5C16 5.7 8.6 8.2 7.3 14.3c-.9 4.1 2.4 7 6.1 6.4 7-1.1 10.1-9 12.1-15.2Z" fill="currentColor"/>
+            <path d="M5 27c4-7.3 9-11.7 16-15" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>Plant<span class="brand-accent">Now</span></span>
+      </a>
+      <p>نزرع المعرفة، وننمو مع الأرض.</p>
+      <a class="back-to-top" href="#home">العودة للأعلى ↑</a>
+    </footer>
+  </body>
+</html>
